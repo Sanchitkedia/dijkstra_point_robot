@@ -91,10 +91,81 @@ def user_input(obstacle_map):
 
     return start, goal
 
-def ActionMoveUp():
+def ActionMoveUp(node, obstacle_map):
 
+    new_node = np.copy(node)
+    if (new_node[1] < obstacle_map.shape[0]-1) and (obstacle_map[obstacle_map.shape[0]-1 - new_node[1] - 1][new_node[0]][0] == 1):
+        new_node[1] = new_node[1] + 1
+        return new_node
+    else:
+        return None
 
-    return
+def ActionMoveDown(node, obstacle_map):
+    
+    new_node = np.copy(node)
+    if (new_node[1] > 0) and (obstacle_map[obstacle_map.shape[0]-1 - new_node[1] + 1][new_node[0]][0] == 1):
+        new_node[1] = new_node[1] - 1
+        return new_node
+    else:
+        return None
+        
+def ActionMoveLeft(node, obstacle_map):
+        
+    new_node = np.copy(node)
+    if (new_node[0] > 0) and (obstacle_map[obstacle_map.shape[0]-1 - new_node[1]][new_node[0] - 1][0] == 1):
+        new_node[0] = new_node[0] - 1
+        return new_node
+    else:
+        return None
+    
+def ActionMoveRight(node, obstacle_map):
+                
+    new_node = np.copy(node)
+    if (new_node[0] < obstacle_map.shape[1]-1) and (obstacle_map[obstacle_map.shape[0]-1 - new_node[1]][new_node[0] + 1][0] == 1):
+        new_node[0] = new_node[0] + 1
+        return new_node
+    else:
+        return None
+                    
+def ActionMoveUpLeft(node, obstacle_map):
+                        
+    new_node = np.copy(node)
+    if (new_node[0] > 0) and (new_node[1] < obstacle_map.shape[0]-1) and (obstacle_map[obstacle_map.shape[0]-1 - new_node[1] - 1][new_node[0] - 1][0] == 1):
+        new_node[0] = new_node[0] - 1
+        new_node[1] = new_node[1] + 1
+        return new_node
+    else:
+        return None
+
+def ActionMoveUpRight(node, obstacle_map):
+                            
+    new_node = np.copy(node)
+    if (new_node[0] < obstacle_map.shape[1]-1) and (new_node[1] < obstacle_map.shape[0]-1) and (obstacle_map[obstacle_map.shape[0]-1 - new_node[1] - 1][new_node[0] + 1][0] == 1):
+        new_node[0] = new_node[0] + 1
+        new_node[1] = new_node[1] + 1
+        return new_node
+    else:
+        return None
+
+def ActionMoveDownLeft(node, obstacle_map):
+                                
+    new_node = np.copy(node)
+    if (new_node[0] > 0) and (new_node[1] > 0) and (obstacle_map[obstacle_map.shape[0]-1 - new_node[1] + 1][new_node[0] - 1][0] == 1):
+        new_node[0] = new_node[0] - 1
+        new_node[1] = new_node[1] - 1
+        return new_node
+    else:
+        return None
+
+def ActionMoveDownRight(node, obstacle_map):
+                                    
+    new_node = np.copy(node)
+    if (new_node[0] < obstacle_map.shape[1]-1) and (new_node[1] > 0) and (obstacle_map[obstacle_map.shape[0]-1 - new_node[1] + 1][new_node[0] + 1][0] == 1):
+        new_node[0] = new_node[0] + 1
+        new_node[1] = new_node[1] - 1
+        return new_node
+    else:
+        return None     
 
 def main():
     obstacle_map = np.ones((250,600,3), dtype=np.uint8)
@@ -110,7 +181,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
