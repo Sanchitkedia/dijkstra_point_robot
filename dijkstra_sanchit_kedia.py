@@ -31,11 +31,11 @@ def create_cv_map(base_map):
                 base_map[y][x] = [0,255,0]
 
             # Equations for hexagon using half-plane method
-            if (y-(0.58*x)+123.38+offset)>= 0 and (y-(-0.57*x)-370.77-offset)<= 0 and (y-(0.58*x)-24.62-offset)<= 0 and (y-(-0.58*x)-225.38+offset)>= 0 and (x-235+offset) >= 0 and (x-365-offset) <= 0:
+            if (y-(0.58*x)-(-offset*(0.58**2 + 1)**0.5 -123.38))>= 0 and (y-(-0.57*x)-(offset*((-0.57)**2 + 1)**0.5 + 370.77))<= 0 and (y-(0.58*x)-(offset*(0.58**2 + 1)**0.5 + 24.62))<= 0 and (y-(-0.58*x)-(-offset*((-0.58)**2 + 1)**0.5 + 225.38))>= 0 and (x-235+offset) >= 0 and (x-365-offset) <= 0:
                 base_map[y][x] = [0,255,0]
 
             # Equations for triangle using half-plane method
-            if (y-(2*x)+895+offset)>= 0 and (y+(2*x)-1145-offset)<= 0 and (x-460+offset) >= 0:
+            if (y-(2*x)-(-offset*(2**2 + 1)**0.5 + (-895)))>= 0 and (y-(-2*x)-(offset*((-2)**2 + 1)**0.5 + (1145)))<= 0 and (x-460+offset) >= 0:
                 base_map[y][x] = [0,255,0]
 
             # Equations for boundary using half-plane method
@@ -53,11 +53,11 @@ def create_cv_map(base_map):
                 base_map[y][x] = [0,0,255]
 
             # Equations for hexagon using half-plane method
-            if (y-(0.58*x)+123.38)>= 0 and (y-(-0.57*x)-370.77)<= 0 and (y-(0.58*x)-24.62)<= 0 and (y-(-0.58*x)-225.38)>= 0 and (x-235) >= 0 and (x-365) <= 0:
+            if (y-(0.58*x)-(-123.38))>= 0 and (y-(-0.57*x)-(370.77))<= 0 and (y-(0.58*x)-(24.62))<= 0 and (y-(-0.58*x)-(225.38))>= 0 and (x-235) >= 0 and (x-365) <= 0:
                 base_map[y][x] = [0,0,255]
 
             # Equations for triangle using half-plane method
-            if (y-(2*x)+895)>= 0 and (y+(2*x)-1145)<= 0 and (x-460) >= 0:
+            if (y-(2*x)-(-895))>= 0 and (y-(-2*x)-(1145))<= 0 and (x-460) >= 0:
                 base_map[y][x] = [0,0,255]
 
     return base_map
@@ -213,9 +213,9 @@ def ActionMoveDownRight(node, obstacle_map):
 def CheckGoal(node, goal,start, obstacle_map,ClosedList,start_time):
     if node[0] == goal[0] and node[1] == goal[1]:
         print("\nGoal Reached")
-        print("\nPath Length: ", len(ClosedList))
         end_time = time.time()
-        print("\nTime taken: ", end_time - start_time, "seconds")
+        time_taken = round(end_time - start_time, 2)
+        print("\nTime taken: ", time_taken, "seconds")
         obstacle_map = Backtrack(start, goal, ClosedList, obstacle_map)
     else:
         return False
@@ -252,6 +252,8 @@ def Backtrack(start, goal, ClosedList, obstacle_map):
 
     obstacle_map[start[1], start[0]] = (0,255,0)
     obstacle_map[goal[1], goal[0]] = (0,255,0)
+
+    print("\nPath length: ", len(path))
 
     # show the image in the same window 
     cv2.imshow("Exploration", obstacle_map)
