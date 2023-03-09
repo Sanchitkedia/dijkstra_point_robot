@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-# import pygame
 import time
 import heapq as hq
 
@@ -61,36 +60,6 @@ def create_cv_map(base_map):
                 base_map[y][x] = [0,0,255]
 
     return base_map
-
-# def create_pygame_map():
-#     import pygame
-#     pygame.init()
-#     # Create the display surface object
-#     display_surface = pygame.display.set_mode((600, 250))
-#     pygame.display.set_caption
-#     # Define the colors
-#     BLACK = (0, 0, 0)
-#     WHITE = (255, 255, 255)
-#     GREEN = (0, 255, 0)
-#     RED = (255, 0, 0)
-#     BLUE = (0, 0, 255)
-#     YELLOW = (255, 255, 0)
-#     # Draw obstacles
-#     pygame.draw.rect(display_surface, GREEN, (95,0,60,105)) # For Clearance
-#     pygame.draw.rect(display_surface, RED, (100,0,50,100))
-#     pygame.draw.rect(display_surface, GREEN, (95,5,60,105)) # For Clearance
-#     pygame.draw.rect(display_surface, RED, (100,150,50,100))
-#     pygame.draw.polygon(display_surface, GREEN, [(455,20),(455,230),(515,125)]) # For Clearance
-#     pygame.draw.polygon(display_surface, RED, [(460,25),(460,225),(510,125)])
-#     pygame.draw.polygon(display_surface, GREEN, [(300,45),(231,85),(231,165),(300,205),(369,165),(369,85)]) # For Clearance
-#     pygame.draw.polygon(display_surface, RED, [(300,50),(235,87),(235,162),(300,200),(365,163),(365,88)])
-#     pygame.display.update()
-
-#     while True:
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 pygame.quit()
-#                 exit()
 
 def UserInput(obstacle_map):
 
