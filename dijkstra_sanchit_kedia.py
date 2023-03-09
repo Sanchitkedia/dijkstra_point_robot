@@ -6,14 +6,36 @@ import heapq as hq
 
 def create_cv_map(base_map):
     # Draw obstacles
-    base_map = cv2.rectangle(base_map,(100,0),(150,100),(0,255,255),-1)
-    base_map = cv2.rectangle(base_map,(100,150),(150,250),(0,255,255),-1)
-    base_map = cv2.fillPoly(base_map,[np.array([[460,25],[460,225],[510,125]], np.int32)],(0,255,255))
-    base_map = cv2.fillPoly(base_map,[np.array([[300,50],[235,87],[235,162],[300,200],[365,163],[365,88]], np.int32)],(0,255,255))
-    obstacle_map = cv2.rectangle(base_map,(0,0),(600,250),(0,255,255),5)
 
+    # base_map = cv2.rectangle(base_map,(100,0),(150,100),(0,255,255),-1)
+    # base_map = cv2.rectangle(base_map,(100,150),(150,250),(0,255,255),-1)
+    # base_map = cv2.fillPoly(base_map,[np.array([[460,25],[460,225],[510,125]], np.int32)],(0,255,255))
+    # base_map = cv2.fillPoly(base_map,[np.array([[300,50],[235,87],[235,162],[300,200],[365,163],[365,88]], np.int32)],(0,255,255))
+    # obstacle_map = cv2.rectangle(base_map,(0,0),(600,250),(0,255,255),5)
 
-    return obstacle_map
+    for x in range(base_map.shape[1]):
+        for y in range(base_map.shape[0]):
+
+            # Equations for rectangle1 using half-plane method
+            if (x >= 100 and x <= 150) and (y >= 0 and y <= 100):
+                base_map[y][x] = [0,0,255]
+            
+            # Equations for rectangle2 using half-plane method
+            if (x >= 100 and x <= 150) and (y >= 150 and y <= 250):
+                base_map[y][x] = [0,0,255]
+
+            # Equations for hexagon using half-plane method
+            if (y-(0.58*x)+123.38)>= 0 and (y-(-0.57*x)-370.77)<= 0 and (y-(0.58*x)-24.62)<= 0 and (y-(-0.58*x)-225.38)>= 0 and (x-235) >= 0 and (x-365) <= 0:
+                base_map[y][x] = [0,0,255]
+
+            # Equations for triangle using half-plane method
+            if (y-(2*x)+895)>= 0 and (y+(2*x)-1145)<= 0 and (x-460) >= 0:
+                base_map[y][x] = [0,0,255]
+
+            if(x-5<=0) or (x-595>=0) or (y-5 <=0) or (y-245>=0):
+                base_map[y][x] = [0,0,255]
+
+    return base_map
 
 # def create_pygame_map():
 #     import pygame
