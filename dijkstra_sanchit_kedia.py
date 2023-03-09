@@ -13,8 +13,36 @@ def create_cv_map(base_map):
     # base_map = cv2.fillPoly(base_map,[np.array([[300,50],[235,87],[235,162],[300,200],[365,163],[365,88]], np.int32)],(0,255,255))
     # obstacle_map = cv2.rectangle(base_map,(0,0),(600,250),(0,255,255),5)
 
+    radius = 0
+    clearance = 5
+    offset = radius + clearance
+
     for x in range(base_map.shape[1]):
         for y in range(base_map.shape[0]):
+
+         # Drawing Scaled Obstacles ie. with clearance
+
+            # Equations for rectangle1 using half-plane method
+            if (x >= 100-offset and x <= 150+offset) and (y >= 0-offset and y <= 100+offset):
+                base_map[y][x] = [0,255,0]
+
+            # Equations for rectangle2 using half-plane method
+            if (x >= 100-offset and x <= 150+offset) and (y >= 150-offset and y <= 250+offset):
+                base_map[y][x] = [0,255,0]
+
+            # Equations for hexagon using half-plane method
+            if (y-(0.58*x)+123.38+offset)>= 0 and (y-(-0.57*x)-370.77-offset)<= 0 and (y-(0.58*x)-24.62-offset)<= 0 and (y-(-0.58*x)-225.38+offset)>= 0 and (x-235+offset) >= 0 and (x-365-offset) <= 0:
+                base_map[y][x] = [0,255,0]
+
+            # Equations for triangle using half-plane method
+            if (y-(2*x)+895+offset)>= 0 and (y+(2*x)-1145-offset)<= 0 and (x-460+offset) >= 0:
+                base_map[y][x] = [0,255,0]
+
+            # Equations for boundary using half-plane method
+            if(x-offset) <= 0 or (x+offset) >= 600 or (y-offset) <= 0 or (y+offset) >= 250:
+                base_map[y][x] = [0,255,0]
+
+         # Drawing Unscaled Obstacles ie. without clearance
 
             # Equations for rectangle1 using half-plane method
             if (x >= 100 and x <= 150) and (y >= 0 and y <= 100):
@@ -30,9 +58,6 @@ def create_cv_map(base_map):
 
             # Equations for triangle using half-plane method
             if (y-(2*x)+895)>= 0 and (y+(2*x)-1145)<= 0 and (x-460) >= 0:
-                base_map[y][x] = [0,0,255]
-
-            if(x-5<=0) or (x-595>=0) or (y-5 <=0) or (y-245>=0):
                 base_map[y][x] = [0,0,255]
 
     return base_map
