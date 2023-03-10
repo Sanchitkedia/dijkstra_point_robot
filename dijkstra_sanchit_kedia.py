@@ -2,6 +2,13 @@ import cv2
 import numpy as np
 import time
 import heapq as hq
+import argparse
+
+def argument_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--save_video', action='store_true')
+    args = parser.parse_args()
+    return args
 
 def create_cv_map(base_map):
     # Draw obstacles
@@ -102,16 +109,13 @@ def UserInput(obstacle_map):
     goal.append(goal_x)
     goal.append(250-goal_y)
 
-    # obstacle_map = cv2.circle(obstacle_map, (start_x, start_y), 1, (255,255,255), -1)
-    # obstacle_map = cv2.circle(obstacle_map, (goal_x, goal_y), 1, (255,255,255), -1)
-
     return start, goal
 
 def ActionMoveUp(node, obstacle_map):
     new_node = []
     new_node.append(node[0])
     new_node.append(node[1] + 1)
-    if (new_node[1] <= 250) and (obstacle_map[obstacle_map.shape[0]- new_node[1]][new_node[0]][0] == 1):
+    if (new_node[1] <= 250) and (obstacle_map[obstacle_map.shape[0] - new_node[1]][new_node[0]][0] == 1):
         return new_node
     else:
         return None
@@ -185,7 +189,8 @@ def CheckGoal(node, goal,start, obstacle_map,ClosedList,start_time):
         end_time = time.time()
         time_taken = round(end_time - start_time, 2)
         print("\nTime taken: ", time_taken, "seconds")
-        obstacle_map = Backtrack(start, goal, ClosedList, obstacle_map)
+        Backtrack(start, goal, ClosedList, obstacle_map)
+        return True
     else:
         return False
 
@@ -205,13 +210,26 @@ def CheckNode(node_new,ClosedList,OpenList,current_cost,current_node,cost):
             hq.heappush(OpenList, [current_cost + cost, current_node[2], node_new])
 
 def Backtrack(start, goal, ClosedList, obstacle_map):
+
+    args = argument_parser()
+    if args.save_video:
+        result = cv2.VideoWriter('DijkstraPlanner.avi',cv2.VideoWriter_fourcc(*'MJPG'),1000,(600,250))
+
+    obstacle_map[start[1], start[0]] = (0,255,0)
+    obstacle_map[goal[1], goal[0]] = (0,255,0)
+
     path = []
     path.append(goal)
     current_node = goal
     for key in list(ClosedList.keys()):
-        obstacle_map[key[1], key[0]] = (255,255,255)
-        cv2.imshow("Exploration", obstacle_map)
-        cv2.waitKey(1)
+        if key == (start[0],start[1]):
+            continue
+        else:
+            obstacle_map[key[1], key[0]] = (255,255,255)
+            cv2.imshow("Exploration", obstacle_map)
+            cv2.waitKey(1)
+            if args.save_video:
+                result.write(obstacle_map)
     while current_node != start:
         current_node = ClosedList[(current_node[0],current_node[1])][1]
         path.append(current_node)
@@ -219,19 +237,20 @@ def Backtrack(start, goal, ClosedList, obstacle_map):
     for i in range(len(path)):
         obstacle_map[path[i][1], path[i][0]] = (255,0,0)
 
-    obstacle_map[start[1], start[0]] = (0,255,0)
-    obstacle_map[goal[1], goal[0]] = (0,255,0)
-
     print("\nPath length: ", len(path))
 
     # show the image in the same window 
     cv2.imshow("Exploration", obstacle_map)
+    if args.save_video:
+        result.write(obstacle_map)    
+        result.release()
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 def DijkstraPlanner(start, goal, obstacle_map):
 
     OpenList = []
+    flag = False
     ClosedList = {}
     node_start = [0.0, start, start]
     hq.heappush(OpenList, node_start)
@@ -242,7 +261,9 @@ def DijkstraPlanner(start, goal, obstacle_map):
         current_node = hq.heappop(OpenList)
         ClosedList[(current_node[2][0],current_node[2][1])] =  current_node[0], current_node[1]
         current_cost = current_node[0]
-        CheckGoal(current_node[2], goal, start, obstacle_map, ClosedList,start_time)
+        if CheckGoal(current_node[2], goal, start, obstacle_map, ClosedList,start_time) == True:
+            flag = True
+            break
         
         new_node = ActionMoveUp(current_node[2],obstacle_map)
         if new_node is not None:
@@ -276,7 +297,11 @@ def DijkstraPlanner(start, goal, obstacle_map):
         if new_node is not None:
             CheckNode(new_node,ClosedList,OpenList,current_cost,current_node,1.4)
 
+    if flag == False:
+        print("\n Path not found")
+
 def main():
+    argument_parser()
     obstacle_map = np.ones((250,600,3), dtype=np.uint8)
     obstacle_map = create_cv_map(obstacle_map)
     start, goal = UserInput(obstacle_map)
