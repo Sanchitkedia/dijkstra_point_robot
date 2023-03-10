@@ -42,8 +42,8 @@ python3 dijkstra_sanchit_kedia.py --save_video # Use this command to run the pro
 ## Output
 
 - Test case 1
-  - START NODE: (19,19)
-  - GOAL NODE: (440,125)
+  - START NODE: (19,8)
+  - GOAL NODE: (308,25)
 
 - Test case 2
   - START NODE: (19,231)
@@ -55,7 +55,7 @@ python3 dijkstra_sanchit_kedia.py --save_video # Use this command to run the pro
 
 ### Video of vizualization of Task 1 in pygame
 
-https://user-images.githubusercontent.com/61658557/224203788-234d6a33-e261-4909-b77f-2cdf5250bc72.mp4
+https://user-images.githubusercontent.com/61658557/224209269-f3055337-afe9-4866-a7e4-667c20596236.mp4
 
 ### Video of vizualization of Task 2 in OpenCV
 
