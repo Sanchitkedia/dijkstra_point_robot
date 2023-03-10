@@ -1,7 +1,15 @@
 import sys
 import pygame
+import vidmaker
 import time
 import heapq as hq
+import argparse
+
+def argument_parser():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--save_video', action='store_true')
+    args = parser.parse_args()
+    return args
 
 def create_pygame_map(display_surface):
     # Define the colors
@@ -98,9 +106,6 @@ def UserInput(obstacle_map):
     goal.append(goal_x)
     goal.append(250-goal_y)
 
-    # obstacle_map = cv2.circle(obstacle_map, (start_x, start_y), 1, (255,255,255), -1)
-    # obstacle_map = cv2.circle(obstacle_map, (goal_x, goal_y), 1, (255,255,255), -1)
-
     return start, goal
 
 def ActionMoveUp(node, obstacle_map):
@@ -108,7 +113,7 @@ def ActionMoveUp(node, obstacle_map):
     new_node.append(node[0])
     new_node.append(node[1] + 1)
     
-    if (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map)-1 - new_node[1]))[0] == 1):
+    if (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map) - new_node[1]))[0] == 1):
         return new_node
     else:
         return None
@@ -117,7 +122,7 @@ def ActionMoveDown(node, obstacle_map):
     new_node = []
     new_node.append(node[0])
     new_node.append(node[1] - 1)
-    if (new_node[1] >= 0) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map)-1 - new_node[1]))[0] == 1):
+    if (new_node[1] >= 0) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map) - new_node[1]))[0] == 1):
         return new_node
     else:
         return None
@@ -126,7 +131,7 @@ def ActionMoveLeft(node, obstacle_map):
     new_node = []
     new_node.append(node[0] - 1)
     new_node.append(node[1])
-    if (new_node[0] >= 0) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map)-1 - new_node[1]))[0] == 1):
+    if (new_node[0] >= 0) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map) - new_node[1]))[0] == 1):
         return new_node
     else:
         return None
@@ -135,7 +140,7 @@ def ActionMoveRight(node, obstacle_map):
     new_node = []
     new_node.append(node[0] + 1)
     new_node.append(node[1])
-    if (new_node[0] < 600) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map)-1 - new_node[1]))[0] == 1):
+    if (new_node[0] < 600) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map) - new_node[1]))[0] == 1):
         return new_node
     else:
         return None
@@ -144,7 +149,7 @@ def ActionMoveUpLeft(node, obstacle_map):
     new_node = []
     new_node.append(node[0] - 1)
     new_node.append(node[1] + 1)
-    if (new_node[0] >= 0) and (new_node[1] < 250) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map)-1 - new_node[1]))[0] == 1):
+    if (new_node[0] >= 0) and (new_node[1] < 250) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map) - new_node[1]))[0] == 1):
         return new_node
     else:
         return None
@@ -153,7 +158,7 @@ def ActionMoveUpRight(node, obstacle_map):
     new_node = []
     new_node.append(node[0] + 1)
     new_node.append(node[1] + 1)
-    if (new_node[0] < 600) and (new_node[1] < 250) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map)-1 - new_node[1]))[0] == 1):
+    if (new_node[0] < 600) and (new_node[1] < 250) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map) - new_node[1]))[0] == 1):
         return new_node
     else:
         return None
@@ -162,7 +167,7 @@ def ActionMoveDownLeft(node, obstacle_map):
     new_node = []
     new_node.append(node[0] - 1)
     new_node.append(node[1] - 1)
-    if (new_node[0] >= 0) and (new_node[1] >= 0) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map)-1 - new_node[1]))[0] == 1):
+    if (new_node[0] >= 0) and (new_node[1] >= 0) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map) - new_node[1]))[0] == 1):
         return new_node
     else:
         return None
@@ -171,7 +176,7 @@ def ActionMoveDownRight(node, obstacle_map):
     new_node = []
     new_node.append(node[0] + 1)
     new_node.append(node[1] - 1)
-    if (new_node[0] < 600) and (new_node[1] >= 0) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map)-1 - new_node[1]))[0] == 1):
+    if (new_node[0] < 600) and (new_node[1] >= 0) and (obstacle_map.get_at((new_node[0],pygame.Surface.get_height(obstacle_map) - new_node[1]))[0] == 1):
         return new_node
     else:
         return None
@@ -183,7 +188,7 @@ def CheckGoal(node, goal,start, obstacle_map,ClosedList,start_time):
         time_taken = round(end_time - start_time, 2)
         print("\nTime taken: ", time_taken, "seconds")
         Backtrack(start, node, ClosedList, obstacle_map)
-
+        return True
     else:
         return False
 
@@ -203,29 +208,42 @@ def CheckNode(node_new,ClosedList,OpenList,current_cost,current_node,cost):
             hq.heappush(OpenList, [current_cost + cost, current_node[2], node_new])
 
 def Backtrack(start, goal, ClosedList, obstacle_map):
+    args = argument_parser()
+    video = vidmaker.Video("DijkstraPlanner.mp4", late_export=True)
     path = []
     path.append(goal)
     current_node = goal
     for key in list(ClosedList.keys()):
-        obstacle_map.set_at((key[0],key[1]),(255,255,255))
-        pygame.display.update()
+        if key == (start[0],start[1]):
+            continue
+        else:
+            obstacle_map.set_at((key[0],key[1]),(255,255,255))
+            if args.save_video:
+                video.update(pygame.surfarray.pixels3d(obstacle_map).swapaxes(0, 1), inverted=False)
+            pygame.display.update()
     while current_node != start:
         current_node = ClosedList[(current_node[0],current_node[1])][1]
         path.append(current_node)
     path.reverse()
     for i in range(len(path)):
         obstacle_map.set_at((path[i][0],path[i][1]),(0,0,255))
+        if args.save_video:
+            video.update(pygame.surfarray.pixels3d(obstacle_map).swapaxes(0, 1), inverted=False)
         pygame.display.update()
-
-    obstacle_map.set_at((start[0],start[1]),(255,0,0))
-    obstacle_map.set_at((goal[0],goal[1]),(0,255,0))
+  
     pygame.display.update()
+    pygame.image.save(obstacle_map, "Dijkstra.png")
 
     print("\nPath length: ", len(path))
+
+    if args.save_video:
+        video.export(verbose=True)
+        video.compress(target_size=1024, new_file=False) 
 
 def DijkstraPlanner(start, goal, obstacle_map):
 
     OpenList = []
+    flag = False
     ClosedList = {}
     node_start = [0.0, start, start]
     hq.heappush(OpenList, node_start)
@@ -236,7 +254,9 @@ def DijkstraPlanner(start, goal, obstacle_map):
         current_node = hq.heappop(OpenList)
         ClosedList[(current_node[2][0],current_node[2][1])] =  current_node[0], current_node[1]
         current_cost = current_node[0]
-        CheckGoal(current_node[2], goal, start, obstacle_map, ClosedList,start_time)
+        if CheckGoal(current_node[2], goal, start, obstacle_map, ClosedList,start_time) == True:
+            flag = True
+            break
 
         new_node = ActionMoveUp(current_node[2],obstacle_map)
         if new_node is not None:
@@ -270,9 +290,13 @@ def DijkstraPlanner(start, goal, obstacle_map):
         if new_node is not None:
             CheckNode(new_node,ClosedList,OpenList,current_cost,current_node,1.4)
 
-def main():
-    clock = pygame.time.Clock()
+    if flag == False:
+        print("\n Path not found")
 
+def main():
+    argument_parser()
+    pygame.init()
+    clock = pygame.time.Clock()
     clock.tick(60)
     obstacle_map = pygame.display.set_mode((600, 250))
     pygame.display.set_caption("Dijkstra Planner")
