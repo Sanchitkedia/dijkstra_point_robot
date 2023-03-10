@@ -74,37 +74,37 @@ def UserInput(obstacle_map):
     goal = []
     
     while True:
-        start_x = int(input("Enter the x coordinate of the start point: "))
+        start_x = int(input("\nEnter the x coordinate of the start point: "))
         while start_x < 0 or start_x > 600:
-            print("Invalid input. Please enter a value between 0 and 600.")
+            print("\nInvalid input. Please enter a value between 0 and 600.")
             start_x = int(input("Enter the x coordinate of the start point: "))
         
-        start_y = int(input("Enter the y coordinate of the start point: "))
+        start_y = int(input("\nEnter the y coordinate of the start point: "))
         while start_y < 0 or start_y > 250:
-            print("Invalid input. Please enter a value between 0 and 250.")
+            print("\nInvalid input. Please enter a value between 0 and 250.")
             start_y = int(input("Enter the y coordinate of the start point: "))
 
         if obstacle_map[obstacle_map.shape[0]-1 - start_y][start_x][0] == 1:
             break
-        print("The start point is inside an obstacle. Please enter a valid start point.")
+        print("\nThe start point is inside an obstacle. Please enter a valid start point.")
 
     start.append(start_x)
     start.append(250-start_y)
     
     while True:
-        goal_x = int(input("Enter the x coordinate of the goal point: "))
+        goal_x = int(input("\nEnter the x coordinate of the goal point: "))
         while (goal_x < 0 or goal_x > 600):
-            print("Invalid input. Please enter a value between 0 and 600.")
+            print("\nInvalid input. Please enter a value between 0 and 600.")
             goal_x = int(input("Enter the x coordinate of the goal point: "))
         
-        goal_y = int(input("Enter the y coordinate of the goal point: "))
+        goal_y = int(input("\nEnter the y coordinate of the goal point: "))
         while goal_y < 0 or goal_y > 250:
-            print("Invalid input. Please enter a value between 0 and 250.")
+            print("\nInvalid input. Please enter a value between 0 and 250.")
             goal_y = int(input("Enter the y coordinate of the goal point: "))
 
         if obstacle_map[obstacle_map.shape[0]-1 - goal_y][goal_x][0] == 1:
             break
-        print("The goal point is inside an obstacle. Please enter a valid goal point.")
+        print("\nThe goal point is inside an obstacle. Please enter a valid goal point.")
     
     goal.append(goal_x)
     goal.append(250-goal_y)
@@ -185,10 +185,10 @@ def ActionMoveDownRight(node, obstacle_map):
 
 def CheckGoal(node, goal,start, obstacle_map,ClosedList,start_time):
     if node[0] == goal[0] and node[1] == goal[1]:
-        print("\nGoal Reached")
+        print("\n\033[92;5m" + "*****  Goal Reached!  *****" + "\033[0m")
         end_time = time.time()
         time_taken = round(end_time - start_time, 2)
-        print("\nTime taken: ", time_taken, "seconds")
+        print("\n\033[92m" + "Time taken: " + str(time_taken) + " seconds" + "\033[0m")
         Backtrack(start, goal, ClosedList, obstacle_map)
         return True
     else:
@@ -213,7 +213,7 @@ def Backtrack(start, goal, ClosedList, obstacle_map):
 
     args = argument_parser()
     if args.save_video:
-        result = cv2.VideoWriter('DijkstraPlanner.avi',cv2.VideoWriter_fourcc(*'MJPG'),1000,(600,250))
+        result = cv2.VideoWriter('DijkstraPlanner_opencv.avi',cv2.VideoWriter_fourcc(*'MJPG'),1000,(600,250))
 
     obstacle_map[start[1], start[0]] = (0,255,0)
     obstacle_map[goal[1], goal[0]] = (0,255,0)
@@ -237,13 +237,14 @@ def Backtrack(start, goal, ClosedList, obstacle_map):
     for i in range(len(path)):
         obstacle_map[path[i][1], path[i][0]] = (255,0,0)
 
-    print("\nPath length: ", len(path))
+    print("\n\033[92m" + "Path Length: " + str(len(path)) + " seconds" + "\033[0m\n")
 
     # show the image in the same window 
     cv2.imshow("Exploration", obstacle_map)
     if args.save_video:
         result.write(obstacle_map)    
         result.release()
+    print("\n\033[1m" + " Press q to exit " + "\033[0m")
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
@@ -298,7 +299,7 @@ def DijkstraPlanner(start, goal, obstacle_map):
             CheckNode(new_node,ClosedList,OpenList,current_cost,current_node,1.4)
 
     if flag == False:
-        print("\n Path not found")
+        print("\n\033[91m" + "No Valid Path Found!" + "\033[0m\n")
 
 def main():
     argument_parser()
@@ -308,4 +309,7 @@ def main():
     DijkstraPlanner(start, goal, obstacle_map)
 
 if __name__ == '__main__':
+    print("\n\033[1m" + "******************************************" + "\033[0m")
+    print("\033[1m" + "     Dijkstra Algorithm : Point Robot     " + "\033[0m")
+    print("\033[1m" + "******************************************" + "\033[0m")
     main()

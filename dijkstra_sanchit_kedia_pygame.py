@@ -71,37 +71,37 @@ def UserInput(obstacle_map):
     goal = []
     
     while True:
-        start_x = int(input("Enter the x coordinate of the start point: "))
+        start_x = int(input("\nEnter the x coordinate of the start point: "))
         while start_x < 0 or start_x > 600:
-            print("Invalid input. Please enter a value between 0 and 600.")
+            print("\nInvalid input. Please enter a value between 0 and 600.")
             start_x = int(input("Enter the x coordinate of the start point: "))
         
-        start_y = int(input("Enter the y coordinate of the start point: "))
+        start_y = int(input("\nEnter the y coordinate of the start point: "))
         while start_y < 0 or start_y > 250:
-            print("Invalid input. Please enter a value between 0 and 250.")
+            print("\nInvalid input. Please enter a value between 0 and 250.")
             start_y = int(input("Enter the y coordinate of the start point: "))
 
         if obstacle_map.get_at((start_x,pygame.Surface.get_height(obstacle_map)-1 - start_y))[0] == 1:
             break
-        print("The start point is inside an obstacle. Please enter a valid start point.")
+        print("\nThe start point is inside an obstacle. Please enter a valid start point.")
 
     start.append(start_x)
     start.append(250-start_y)
     
     while True:
-        goal_x = int(input("Enter the x coordinate of the goal point: "))
+        goal_x = int(input("\nEnter the x coordinate of the goal point: "))
         while (goal_x < 0 or goal_x > 600):
-            print("Invalid input. Please enter a value between 0 and 600.")
+            print("\nInvalid input. Please enter a value between 0 and 600.")
             goal_x = int(input("Enter the x coordinate of the goal point: "))
         
-        goal_y = int(input("Enter the y coordinate of the goal point: "))
+        goal_y = int(input("\nEnter the y coordinate of the goal point: "))
         while goal_y < 0 or goal_y > 250:
-            print("Invalid input. Please enter a value between 0 and 250.")
+            print("\nInvalid input. Please enter a value between 0 and 250.")
             goal_y = int(input("Enter the y coordinate of the goal point: "))
 
         if obstacle_map.get_at((goal_x,pygame.Surface.get_height(obstacle_map)-1 - goal_y))[0] == 1:
             break
-        print("The goal point is inside an obstacle. Please enter a valid goal point.")
+        print("\nThe goal point is inside an obstacle. Please enter a valid goal point.")
     
     goal.append(goal_x)
     goal.append(250-goal_y)
@@ -183,10 +183,10 @@ def ActionMoveDownRight(node, obstacle_map):
 
 def CheckGoal(node, goal,start, obstacle_map,ClosedList,start_time):
     if node[0] == goal[0] and node[1] == goal[1]:
-        print("\nGoal Reached")
+        print("\n\033[92;5m" + "*****  Goal Reached!  *****" + "\033[0m")
         end_time = time.time()
         time_taken = round(end_time - start_time, 2)
-        print("\nTime taken: ", time_taken, "seconds")
+        print("\n\033[92m" + "Time taken: " + str(time_taken) + " seconds" + "\033[0m")
         Backtrack(start, node, ClosedList, obstacle_map)
         return True
     else:
@@ -209,7 +209,7 @@ def CheckNode(node_new,ClosedList,OpenList,current_cost,current_node,cost):
 
 def Backtrack(start, goal, ClosedList, obstacle_map):
     args = argument_parser()
-    video = vidmaker.Video("DijkstraPlanner.mp4", late_export=True)
+    video = vidmaker.Video("DijkstraPlanner_pygame.mp4", late_export=True)
     path = []
     path.append(goal)
     current_node = goal
@@ -232,9 +232,8 @@ def Backtrack(start, goal, ClosedList, obstacle_map):
         pygame.display.update()
   
     pygame.display.update()
-    pygame.image.save(obstacle_map, "Dijkstra.png")
 
-    print("\nPath length: ", len(path))
+    print("\n\033[92m" + "Path Length: " + str(len(path)) + " seconds" + "\033[0m\n")
 
     if args.save_video:
         video.export(verbose=True)
@@ -291,7 +290,7 @@ def DijkstraPlanner(start, goal, obstacle_map):
             CheckNode(new_node,ClosedList,OpenList,current_cost,current_node,1.4)
 
     if flag == False:
-        print("\n Path not found")
+        print("\n\033[91m" + "No Valid Path Found!" + "\033[0m\n")
 
 def main():
     argument_parser()
@@ -305,6 +304,7 @@ def main():
     create_pygame_map(obstacle_map)
     start, goal = UserInput(obstacle_map)
     DijkstraPlanner(start, goal, obstacle_map)
+    print("\n\033[1m" + " Press q to exit " + "\033[0m")
 
     while True:
         for event in pygame.event.get():
@@ -317,4 +317,7 @@ def main():
                 sys.exit()
 
 if __name__ == '__main__':
+    print("\n\033[1m" + "******************************************" + "\033[0m")
+    print("\033[1m" + "     Dijkstra Algorithm : Point Robot     " + "\033[0m")
+    print("\033[1m" + "******************************************" + "\033[0m")
     main()
