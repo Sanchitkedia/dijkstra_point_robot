@@ -55,6 +55,12 @@ python3 dijkstra_sanchit_kedia.py --save_video # Use this command to run the pro
 
 ### Video of vizualization of Task 1 in pygame
 
+https://user-images.githubusercontent.com/61658557/224203788-234d6a33-e261-4909-b77f-2cdf5250bc72.mp4
+
 ### Video of vizualization of Task 2 in OpenCV
 
+https://user-images.githubusercontent.com/61658557/224203222-dec8b470-60ef-4b8b-990f-7db4e0c79649.mp4
+
 ### Terminal output for Task 3 [Goal node not reachable]
+
+![Screenshot from 2023-03-09 20-41-30](https://user-images.githubusercontent.com/61658557/224203252-86d2d541-46e7-43ce-a85e-462ab17f34e9.png)
