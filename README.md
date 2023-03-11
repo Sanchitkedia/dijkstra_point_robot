@@ -13,13 +13,14 @@ The project is implemented in Python 3.8.10
 
 The project uses the following libraries:
 
-1. numpy
-2. pygame
-3. OpenCV
-4. time
+1. numpy v1.23.5
+2. pygame v2.2.0
+3. OpenCV v4.7.0.68
+4. vidmaker v2.3.0
 5. heapq
 6. sys
-7. vidmaker
+7. time
+8. argparse
 
 ## Usage
 
@@ -28,6 +29,8 @@ The project uses the following libraries:
 ```sh
 python3 dijkstra_sanchit_kedia_pygame.py -h # Use this command to get help for the command line arguments
 python3 dijkstra_sanchit_kedia_pygame.py # Use this command to run the project with vizualization in pygame wihout saving the video
+
+# Saving video slows down the vizualization of the project please be patient while the video is being saved the program will quit automatically after the video is saved
 python3 dijkstra_sanchit_kedia_pygame.py --save_video # Use this command to run the project with vizualization in pygame and save the video
 ```
 
@@ -36,6 +39,8 @@ python3 dijkstra_sanchit_kedia_pygame.py --save_video # Use this command to run 
 ```sh
 python3 dijkstra_sanchit_kedia.py -h # Use this command to get help for the command line arguments
 python3 dijkstra_sanchit_kedia.py # Use this command to run the project with vizualization in OpenCV
+
+# Saving video slows down the vizualization of the project please be patient while the video is being saved the program will quit automatically after the video is saved
 python3 dijkstra_sanchit_kedia.py --save_video # Use this command to run the project with vizualization in OpenCV and save the video
 ```
 
