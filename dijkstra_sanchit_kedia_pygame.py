@@ -34,7 +34,7 @@ def create_pygame_map(display_surface):
                 display_surface.set_at((x,y), GREEN)
 
             # Equations for hexagon using half-plane method
-            if (y-(0.58*x)-(-offset*(0.58**2 + 1)**0.5 -123.38))>= 0 and (y-(-0.57*x)-(offset*((-0.57)**2 + 1)**0.5 + 370.77))<= 0 and (y-(0.58*x)-(offset*(0.58**2 + 1)**0.5 + 24.62))<= 0 and (y-(-0.58*x)-(-offset*((-0.58)**2 + 1)**0.5 + 225.38))>= 0 and (x-235+offset) >= 0 and (x-365-offset) <= 0:
+            if (y-(0.578*x)-(-offset*(0.578**2 + 1)**0.5 -123.21))>= 0 and (y-(-0.578*x)-(offset*((-0.578)**2 + 1)**0.5 + 373.21))<= 0 and (y-(0.578*x)-(offset*(0.578**2 + 1)**0.5 + 26.79))<= 0 and (y-(-0.578*x)-(-offset*((-0.578)**2 + 1)**0.5 + 223.21))>= 0 and (x-235+offset) >= 0 and (x-365-offset) <= 0:
                 display_surface.set_at((x,y), GREEN)
 
             # Equations for triangle using half-plane method
@@ -56,7 +56,7 @@ def create_pygame_map(display_surface):
                 display_surface.set_at((x,y), RED)
 
             # Equations for hexagon using half-plane method
-            if (y-(0.58*x)-(-123.38))>= 0 and (y-(-0.57*x)-(370.77))<= 0 and (y-(0.58*x)-(24.62))<= 0 and (y-(-0.58*x)-(225.38))>= 0 and (x-235) >= 0 and (x-365) <= 0:
+            if (y-(0.578*x)-(-123.21))>= 0 and (y-(-0.578*x)-(373.21))<= 0 and (y-(0.578*x)-(26.79))<= 0 and (y-(-0.578*x)-(223.21))>= 0 and (x-235) >= 0 and (x-365) <= 0:
                 display_surface.set_at((x,y), RED)
 
             # Equations for triangle using half-plane method
@@ -232,12 +232,13 @@ def Backtrack(start, goal, ClosedList, obstacle_map):
         pygame.display.update()
   
     pygame.display.update()
-
-    print("\n\033[92m" + "Path Length: " + str(len(path)) + " seconds" + "\033[0m\n")
+    # print("\n\033[92m" + "ClosedList Length: " + str(len(ClosedList)) + "\033[0m\n")
+    print("\n\033[92m" + "Path Length: " + str(len(path)) + "\033[0m\n")
 
     if args.save_video:
+        pygame.quit()
         video.export(verbose=True)
-        video.compress(target_size=1024, new_file=False) 
+        video.compress(target_size=1024, new_file=False)
 
 def DijkstraPlanner(start, goal, obstacle_map):
 
@@ -254,6 +255,7 @@ def DijkstraPlanner(start, goal, obstacle_map):
         ClosedList[(current_node[2][0],current_node[2][1])] =  current_node[0], current_node[1]
         current_cost = current_node[0]
         if CheckGoal(current_node[2], goal, start, obstacle_map, ClosedList,start_time) == True:
+            # print("\n\033[92m" + "OpenList Length: " + str(len(OpenList)) + " seconds" + "\033[0m\n")
             flag = True
             break
 
@@ -293,7 +295,7 @@ def DijkstraPlanner(start, goal, obstacle_map):
         print("\n\033[91m" + "No Valid Path Found!" + "\033[0m\n")
 
 def main():
-    argument_parser()
+    args = argument_parser()
     pygame.init()
     clock = pygame.time.Clock()
     clock.tick(60)
@@ -306,7 +308,7 @@ def main():
     DijkstraPlanner(start, goal, obstacle_map)
     print("\n\033[1m" + " Press q to exit " + "\033[0m")
 
-    while True:
+    while True and args.save_video == False:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
