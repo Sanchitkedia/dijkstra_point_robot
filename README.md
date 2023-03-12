@@ -27,6 +27,7 @@ The project uses the following libraries:
 ### The project with vizualization in pygame can be run using the following command
 
 ```sh
+cd <path to the project>
 python3 dijkstra_sanchit_kedia_pygame.py -h # Use this command to get help for the command line arguments
 python3 dijkstra_sanchit_kedia_pygame.py # Use this command to run the project with vizualization in pygame wihout saving the video
 
@@ -37,6 +38,7 @@ python3 dijkstra_sanchit_kedia_pygame.py --save_video # Use this command to run 
 ### The project with vizualization in OpenCV can be run using the following command
 
 ```sh
+cd <path to the project>
 python3 dijkstra_sanchit_kedia.py -h # Use this command to get help for the command line arguments
 python3 dijkstra_sanchit_kedia.py # Use this command to run the project with vizualization in OpenCV
 
