@@ -1,4 +1,4 @@
-# Project 8 Puzzle Solve using BFS
+# Project : Dijkstra algorithm for a point robot
 
 The project is to implement the Dijkstra algorithm for path planning of a point robot.
 The project is a part of the course ENPM661 - Planning for Autonomous Robots at the University of Maryland, College Park.
